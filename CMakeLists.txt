@@ -16,6 +16,8 @@ add_executable(cpp_snake
         headers/apple.hpp
         src/wall.cpp
         headers/wall.hpp
+        src/soundengine.cpp
+        headers/soundengine.hpp
 )
 
 include_directories(headers /usr/include c:/SFML/include)

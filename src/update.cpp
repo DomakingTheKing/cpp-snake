@@ -3,6 +3,10 @@
 //
 
 #include "Engine.hpp"
+#include "soundengine.hpp"
+#include <iostream>
+#include <thread>
+#include <chrono>
 
 void Engine::update() {
     // Update snake sections positions
@@ -15,23 +19,27 @@ void Engine::update() {
             // Make sure we don't reserve direction
             switch (snakeDirection) {
                 case Direction::UP:
-                    if (directionQueue.front() != Direction::DOWN) {
+                    if (directionQueue.front() != Direction::DOWN && directionQueue.front() != Direction::UP) {
                         snakeDirection = directionQueue.front();
+                        std::thread([&engine]() { sf::Sound sound = engine.getSound("example.wav", 50); sound.play(); }).detach();
                     }
                     break;
                 case Direction::DOWN:
-                    if (directionQueue.front() != Direction::UP) {
+                    if (directionQueue.front() != Direction::UP && directionQueue.front() != Direction::DOWN) {
                         snakeDirection = directionQueue.front();
+                        playPitchedSound("change_direction.wav", 30);
                     }
                     break;
                 case Direction::LEFT:
-                    if (directionQueue.front() != Direction::RIGHT) {
+                    if (directionQueue.front() != Direction::RIGHT && directionQueue.front() != Direction::LEFT) {
                         snakeDirection = directionQueue.front();
+                        playPitchedSound("change_direction.wav", 30);
                     }
                     break;
                 case Direction::RIGHT:
-                    if (directionQueue.front() != Direction::LEFT) {
+                    if (directionQueue.front() != Direction::LEFT && directionQueue.front() != Direction::RIGHT) {
                         snakeDirection = directionQueue.front();
+                        playPitchedSound("change_direction.wav", 30);
                     }
                     break;
             }
@@ -80,7 +88,7 @@ void Engine::update() {
 
         // Collision detection - Apple
         if (snake[0].getShape().getGlobalBounds().intersects(apple.getSprite().getGlobalBounds())) {
-            playPitchedSound("eat_apple.wav");
+            playPitchedSound("eat_apple.wav", 80);
 
             applesEatenThisLevel++;
             applesEatenTotal++;
@@ -111,6 +119,7 @@ void Engine::update() {
         for (int s = 1; s < snake.size(); s++) {
             if (snake[0].getShape().getGlobalBounds().intersects(snake[s].getShape().getGlobalBounds())) {
                 // Game Over
+                playSound("crowd_boo_lose.wav", 80);
                 currentGameState = GameState::GAMEOVER;
             }
         }
@@ -119,6 +128,7 @@ void Engine::update() {
         for (auto & wall : wallSections) {
             if (snake[0].getShape().getGlobalBounds().intersects(wall.getShape().getGlobalBounds())) {
                 // Game Over
+                playSound("crowd_boo_lose.wav", 80);
                 currentGameState = GameState::GAMEOVER;
             }
         }

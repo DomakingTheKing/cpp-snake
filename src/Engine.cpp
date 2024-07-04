@@ -242,34 +242,13 @@ void Engine::loadLevel(int levelNumber) {
     level.close();
 }
 
-void Engine::playPitchedSound(const sf::String& fileName) {
-    std::thread([fileName]() {
-        sf::SoundBuffer buffer;
-        if (!buffer.loadFromFile("assets/audio/sfx/" + fileName)) {
-            // Gestisci l'errore
-            std::cerr << "Errore nel caricamento del file audio" << std::endl;
-            return;
-        }
+double Engine::getRandomValue(double n1, double n2) {
+    // Usa la libreria di numeri casuali di C++11
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0.5, 2.0);
 
-        sf::Sound sound;
-        sound.setBuffer(buffer);
-
-        // Usa la libreria di numeri casuali di C++11
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<> dis(0.5, 2.0);
-
-        // Imposta un pitch randomico tra 0.5 e 2.0
-        float randomPitch = dis(gen);
-        sound.setPitch(randomPitch);
-
-        sound.play();
-
-        // Attendi che il suono finisca di essere riprodotto
-        while (sound.getStatus() == sf::Sound::Playing) {
-            sf::sleep(sf::milliseconds(100));
-        }
-    }).detach();
+    return dis(gen);
 }
 
 void Engine::run() {

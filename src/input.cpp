@@ -2,7 +2,6 @@
 // Created by Domakingo on 04/07/2024.
 //
 
-#include <iostream>
 #include "Engine.hpp"
 
 void Engine::input() {

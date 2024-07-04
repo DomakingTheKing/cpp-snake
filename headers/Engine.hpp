@@ -81,7 +81,7 @@ public:
 
     void togglePause();
 
-    static void playPitchedSound(const String& fileName);
+    static double getRandomValue(double n1, double n2);
 
     // The main loop will be in the run function
     void run();
