@@ -20,6 +20,16 @@ void Engine::input() {
                 window.close();
             }
 
+            // Mute ost
+            if (event.key.code == Keyboard::M) {
+                if (soundEngine.getMainOst()->getStatus() == sf::SoundSource::Playing) {
+                    soundEngine.stopSound(soundEngine.getMainOst());
+                }
+                else {
+                    soundEngine.playSound(soundEngine.getMainOst());
+                }
+            }
+
             // Pause
             if (event.key.code == Keyboard::P) {
                 togglePause();

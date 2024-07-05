@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.26)
 project(cpp_snake)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -66,3 +66,11 @@ endif()
 
 message(STATUS "CMake Source Dir: ${CMAKE_SOURCE_DIR}")
 message(STATUS "CMake Binary Dir: ${CMAKE_BINARY_DIR}")
+
+
+# Use fixup_bundle to ensure all dependencies are included
+install(TARGETS cpp_snake RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+install(CODE "
+    include(BundleUtilities)
+    fixup_bundle(\"${CMAKE_CURRENT_SOURCE_DIR}/bin/cpp_snake\" \"\" \"\")
+    ")

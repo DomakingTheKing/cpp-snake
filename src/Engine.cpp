@@ -120,9 +120,9 @@ void Engine::beginNextLevel() {
 
 void Engine::newSnake() {
     snake.clear();
-    snake.emplace_back(Vector2f(120, 120));
-    snake.emplace_back(Vector2f(80, 120));
-    snake.emplace_back(Vector2f(40, 120));
+    snake.emplace_back(Vector2f(120, 400));
+    snake.emplace_back(Vector2f(80, 400));
+    snake.emplace_back(Vector2f(40, 400));
 }
 
 void Engine::addSnakeSection() {
