@@ -3,6 +3,7 @@
 //
 
 #include "Engine.hpp"
+#include "soundengine.hpp"
 
 void Engine::input() {
     Event event{};
@@ -29,6 +30,7 @@ void Engine::input() {
             if (currentGameState != GameState::PAUSED) {
                 if (event.key.code == Keyboard::R) {
                     startGame();
+                    soundEngine.fadeOutAndStopSound(soundEngine.getCrowdBooLoseSfx(), 2);
                 }
             }
 

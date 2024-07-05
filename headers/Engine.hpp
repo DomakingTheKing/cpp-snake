@@ -8,6 +8,7 @@
 #include "snakesection.hpp"
 #include "apple.hpp"
 #include "wall.hpp"
+#include "soundengine.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
@@ -17,6 +18,7 @@
 using namespace sf; // (SFML CLASS)
 using namespace std;
 
+extern SoundEngine soundEngine;
 
 class Engine {
 private:
@@ -81,10 +83,12 @@ public:
 
     void togglePause();
 
-    static double getRandomValue(double n1, double n2);
+    static double getRandomValue(float min, float max);
 
     // The main loop will be in the run function
     void run();
+
+    void stopSound(shared_ptr<Sound> sharedPtr);
 };
 
 

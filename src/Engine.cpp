@@ -15,6 +15,8 @@ using namespace std;
 const sf::Time Engine::TimePerFrame = seconds(1.f / 60.f);
 
 Engine::Engine() {
+    SoundEngine soundEngine;
+
     resolution = Vector2f(1280, 960);
     window.create(VideoMode(static_cast<unsigned int>(resolution.x), static_cast<unsigned int>(resolution.y)), "Snake", Style::Default);
     window.setFramerateLimit(FPS);
@@ -242,11 +244,11 @@ void Engine::loadLevel(int levelNumber) {
     level.close();
 }
 
-double Engine::getRandomValue(double n1, double n2) {
+double Engine::getRandomValue(float min, float max) {
     // Usa la libreria di numeri casuali di C++11
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(0.5, 2.0);
+    std::uniform_real_distribution<> dis(min, max);
 
     return dis(gen);
 }
