@@ -6,18 +6,17 @@
 #define CPP_SNAKE_WALL_HPP
 
 #include <SFML/Graphics.hpp>
-
-using namespace sf;
+#include <opencv2/core/types.hpp>
 
 class Wall {
 private:
-    RectangleShape wallShape;
+    sf::RectangleShape wallShape;
 
 public:
-    Wall(Vector2f position, Vector2f size, Color color);
+    Wall(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Color& color);
+    Wall(const sf::Vector2f& position, const sf::Vector2f& size, const cv::Scalar& color);
 
-    RectangleShape getShape();
+    sf::RectangleShape getShape() const;
 };
-
 
 #endif //CPP_SNAKE_WALL_HPP

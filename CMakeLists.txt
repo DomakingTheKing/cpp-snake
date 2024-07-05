@@ -3,6 +3,9 @@ project(cpp_snake)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# Add the relative path of the directory containing the modules
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
+
 add_executable(cpp_snake
         src/main.cpp
         src/Engine.cpp
@@ -18,21 +21,48 @@ add_executable(cpp_snake
         headers/wall.hpp
         src/soundengine.cpp
         headers/soundengine.hpp
+        src/particles.cpp
+        headers/particles.hpp
 )
 
 include_directories(headers /usr/include c:/SFML/include)
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake_modules")
 
-find_package(SFML REQUIRED system window graphics audio)
-if (SFML_FOUND)
+# Find OpenCV package
+find_package(OpenCV REQUIRED)
+if(OpenCV_FOUND)
+    include_directories(${OpenCV_INCLUDE_DIRS})
+    target_link_libraries(cpp_snake ${OpenCV_LIBS})
+    message(STATUS "OpenCV Include Dirs: ${OpenCV_INCLUDE_DIRS}")
+else()
+    message(FATAL_ERROR "OpenCV not found!")
+endif()
+
+# Find SFML package
+find_package(SFML 2.5 COMPONENTS system window graphics audio REQUIRED)
+if(SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
     target_link_libraries(cpp_snake ${SFML_LIBRARIES})
+    message(STATUS "SFML Include Dir: ${SFML_INCLUDE_DIR}")
+else()
+    message(FATAL_ERROR "SFML not found!")
 endif()
 
-file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+# Copy assets to the build directory
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
 
-# Copy dlls to build dir
-if (WIN32)
-file(GLOB BINARY_DEP_DLLS "${SFML_INCLUDE_DIR}/../bin/*.dll")
-file(COPY ${BINARY_DEP_DLLS} DESTINATION ${CMAKE_BINARY_DIR})
+# Copy DLLs to build directory
+if(WIN32)
+    # Assuming SFML and OpenCV DLLs are in their respective bin directories
+    file(GLOB SFML_DLLS "${SFML_INCLUDE_DIR}/../bin/*.dll")
+    file(GLOB OPENCV_DLLS "${OpenCV_DIR}/../bin/*.dll")
+    list(APPEND BINARY_DEP_DLLS ${SFML_DLLS} ${OPENCV_DLLS})
+
+    # Debug messages
+    message(STATUS "SFML DLLs: ${SFML_DLLS}")
+    message(STATUS "OpenCV DLLs: ${OPENCV_DLLS}")
+
+    file(COPY ${BINARY_DEP_DLLS} DESTINATION ${CMAKE_BINARY_DIR})
 endif()
+
+message(STATUS "CMake Source Dir: ${CMAKE_SOURCE_DIR}")
+message(STATUS "CMake Binary Dir: ${CMAKE_BINARY_DIR}")

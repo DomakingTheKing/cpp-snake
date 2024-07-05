@@ -9,6 +9,7 @@
 #include "apple.hpp"
 #include "wall.hpp"
 #include "soundengine.hpp"
+#include "particles.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
@@ -55,6 +56,8 @@ private:
 
     Time timeSinceLastMove;
 
+    vector<Particles> particles;
+
     int currentGameState{};
     int lastGameState{}; // For storing the last state the game was in when pausing
 
@@ -87,8 +90,6 @@ public:
 
     // The main loop will be in the run function
     void run();
-
-    void stopSound(shared_ptr<Sound> sharedPtr);
 };
 
 

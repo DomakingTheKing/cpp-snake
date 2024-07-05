@@ -1,5 +1,6 @@
 #include "Engine.hpp"
 #include "soundengine.hpp"
+#include "particles.hpp"
 #include <iostream>
 #include <thread>
 
@@ -89,6 +90,8 @@ void Engine::update() {
         if (snake[0].getShape().getGlobalBounds().intersects(apple.getSprite().getGlobalBounds())) {
             soundEngine.getEatAppleSfx()->setPitch(Engine::getRandomValue(0.5, 2));
             soundEngine.playSound(soundEngine.getEatAppleSfx());
+
+            generateParticles(particles, 10, apple.getSprite().getPosition().x, apple.getSprite().getPosition().y, sf::Color::Red, 160.0f, 999.0f, 10); // 999.0f = random speed
 
             applesEatenThisLevel++;
             applesEatenTotal++;

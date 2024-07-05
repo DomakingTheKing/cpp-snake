@@ -2,17 +2,16 @@
 // Created by Domakingo on 04/07/2024.
 //
 
+#include <opencv2/opencv.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
-#include <cstdlib> // for rand() and srand()
 #include <thread>  // for std::thread
-
 #include <random>
 #include "Engine.hpp"
 
-using namespace std;
+using namespace cv;
 
-const sf::Time Engine::TimePerFrame = seconds(1.f / 60.f);
+const Time Engine::TimePerFrame = seconds(1.f / 60.f);
 
 Engine::Engine() {
     resolution = Vector2f(1280, 960);
@@ -156,7 +155,7 @@ void Engine::moveApple() {
 
         // Check if it is in the snake
         for (auto & section : snake) {
-            if (section.getShape().getGlobalBounds().intersects(Rect<float>(newAppleLocation.x, newAppleLocation.y, 40, 40))) {
+            if (section.getShape().getGlobalBounds().intersects(sf::Rect<float>(newAppleLocation.x, newAppleLocation.y, 40, 40))) {
                 badLocation = true;
                 break;
             }
@@ -164,7 +163,7 @@ void Engine::moveApple() {
 
         // Check if it is in the walls
         for (auto & wall : wallSections) {
-            if (wall.getShape().getGlobalBounds().intersects(Rect<float>(newAppleLocation.x, newAppleLocation.y, 40, 40))) {
+            if (wall.getShape().getGlobalBounds().intersects(sf::Rect<float>(newAppleLocation.x, newAppleLocation.y, 40, 40))) {
                 badLocation = true;
                 break;
             }
@@ -218,28 +217,23 @@ void Engine::checkLevelFiles() {
  */
 void Engine::loadLevel(int levelNumber) {
     string levelFile = levels[levelNumber - 1];
-    ifstream level(levelFile);
-    string line;
-    if (level.is_open()) {
-        for (int y = 0; y < 24; y++) {
-            getline(level, line);
-            // Rimuovi eventuali caratteri di fine riga
-            if (!line.empty() && (line.back() == '\n' || line.back() == '\r')) {
-                line.pop_back();
-            }
-            for (int x = 0; x < 32; x++) {
-                if (line[x] == 'w') {
-                    wallSections.emplace_back(Vector2f(static_cast<float>(x) * 40, static_cast<float>(y) * 40), Vector2f(40, 40), Color::White);
-                }
-                else if (line[x] == 'x') {
-                    wallSections.emplace_back(Vector2f(static_cast<float>(x) * 40, static_cast<float>(y) * 40), Vector2f(40, 40), Color::Yellow);
-                }
+    Mat levelImage = imread(levelFile, IMREAD_COLOR);
+
+    if (levelImage.rows != 24 || levelImage.cols != 32) {
+        cerr << "Errore: l'immagine deve essere 32x24 pixel." << endl;
+        return;
+    }
+
+    for (int y = 0; y < levelImage.rows; y++) {
+        for (int x = 0; x < levelImage.cols; x++) {
+            Vec3b color = levelImage.at<Vec3b>(y, x);
+            if (color == Vec3b(255, 255, 255)) { // Bianco
+                wallSections.emplace_back(Vector2f(static_cast<float>(x) * 40, static_cast<float>(y) * 40), Vector2f(40, 40), Color::White);
+            } else if (color == Vec3b(0, 255, 255)) { // Giallo
+                wallSections.emplace_back(Vector2f(static_cast<float>(x) * 40, static_cast<float>(y) * 40), Vector2f(40, 40), Color::Yellow);
             }
         }
-    } else {
-        cerr << "Errore: impossibile aprire il file " << levelFile << endl;
     }
-    level.close();
 }
 
 double Engine::getRandomValue(float min, float max) {
@@ -271,6 +265,10 @@ void Engine::run() {
         }
 
         timeSinceLastMove += dt;
+
+        for (auto& particle : particles) {
+            particle.update();
+        }
 
         input();
         update();

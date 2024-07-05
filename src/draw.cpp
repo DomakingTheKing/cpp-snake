@@ -7,6 +7,18 @@
 void Engine::draw() {
     window.clear(Color::Black);
 
+    particles.erase(
+            std::remove_if(particles.begin(), particles.end(), [](const Particles& p) {
+                return p.shape.getFillColor().a == 0;
+            }),
+            particles.end()
+    );
+
+    // Draw Particles
+    for (const auto& particle : particles) {
+        window.draw(particle.shape);
+    }
+
     // Draw Grid
     sf::Color gridColor(25, 25, 25);
     int cellSize = 40;
@@ -34,7 +46,12 @@ void Engine::draw() {
 
     // Draw walls
     for (auto & wall : wallSections) {
-        window.draw(wall.getShape());
+        if(wall.getShape().getFillColor() == Color::White) {
+            window.draw(wall.getShape());
+        }
+        else if (wall.getShape().getFillColor() == Color::Yellow) {
+            window.draw(wall.getShape());
+        }
     }
 
     // Draw apple
