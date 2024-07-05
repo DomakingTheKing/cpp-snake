@@ -5,7 +5,8 @@ SoundEngine soundEngine;
 Engine engine;
 
 int main() {
-    srand(static_cast<unsigned int>(time(0)));
+    soundEngine.getMainOst()->setLoop(true);
+    soundEngine.playSound(soundEngine.getMainOst());
 
     engine.run();
 

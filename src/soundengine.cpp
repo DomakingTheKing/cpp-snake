@@ -5,17 +5,23 @@
 shared_ptr<Sound> changeDirectionSfx;
 shared_ptr<Sound> eatAppleSfx;
 shared_ptr<Sound> crowdBooLoseSfx;
+shared_ptr<Sound> bonkSfx;
+
+shared_ptr<Sound> mainOst;
 
 SoundEngine::SoundEngine() {
-    changeDirectionSfx = getSound("change_direction.wav", 30.0f);
-    eatAppleSfx = getSound("eat_apple.wav", 80.0f);
-    crowdBooLoseSfx = getSound("crowd_boo_lose.wav", 80.0f);
+    changeDirectionSfx = getSound("sfx/change_direction.wav", 30.0f);
+    eatAppleSfx = getSound("sfx/eat_apple.wav", 80.0f);
+    crowdBooLoseSfx = getSound("sfx/crowd_boo_lose.wav", 100.0f);
+    bonkSfx = getSound("sfx/bonk.wav", 80.0f);
+
+    mainOst = getSound("ost/main.wav", 90.0f);
 }
 
 shared_ptr<Sound> SoundEngine::getSound(const String& fileName, float volume) {
     auto sound = make_shared<Sound>();
     auto buffer = make_shared<SoundBuffer>();
-    if (!buffer->loadFromFile("assets/audio/sfx/" + fileName)) {
+    if (!buffer->loadFromFile("assets/audio/" + fileName)) {
         cerr << "Error loading sound file: " << fileName.toAnsiString() << endl;
         return nullptr;
     }
@@ -57,6 +63,8 @@ void SoundEngine::fadeOutAndStopSound(shared_ptr<Sound> sound, float duration) {
             sound->stop();
             activeSounds.remove(sound);
         }
+
+        cout << "finito";
     }).detach();
 }
 
@@ -70,4 +78,12 @@ shared_ptr<Sound> SoundEngine::getChangeDirectionSfx() {
 
 shared_ptr<Sound> SoundEngine::getCrowdBooLoseSfx() {
     return crowdBooLoseSfx;
+}
+
+shared_ptr<Sound> SoundEngine::getBonkSfx() {
+    return bonkSfx;
+}
+
+shared_ptr<Sound> SoundEngine::getMainOst() {
+    return mainOst;
 }

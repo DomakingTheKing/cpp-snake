@@ -20,9 +20,11 @@ public:
     void stopSound(shared_ptr<Sound> sound);
     void fadeOutAndStopSound(shared_ptr<Sound> sound, float duration);
 
-    shared_ptr<Sound> getEatAppleSfx();
     shared_ptr<Sound> getChangeDirectionSfx();
+    shared_ptr<Sound> getEatAppleSfx();
     shared_ptr<Sound> getCrowdBooLoseSfx();
+    shared_ptr<Sound> getBonkSfx();
+    shared_ptr<Sound> getMainOst();
 
 private:
     mutex soundMutex;
@@ -32,6 +34,8 @@ private:
     shared_ptr<Sound> changeDirectionSfx;
     shared_ptr<Sound> eatAppleSfx;
     shared_ptr<Sound> crowdBooLoseSfx;
+    shared_ptr<Sound> bonkSfx;
+    shared_ptr<Sound> mainOst;
 };
 
 #endif // CPP_SNAKE_SOUNDENGINE_HPP

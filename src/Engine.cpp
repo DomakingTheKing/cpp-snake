@@ -15,8 +15,6 @@ using namespace std;
 const sf::Time Engine::TimePerFrame = seconds(1.f / 60.f);
 
 Engine::Engine() {
-    SoundEngine soundEngine;
-
     resolution = Vector2f(1280, 960);
     window.create(VideoMode(static_cast<unsigned int>(resolution.x), static_cast<unsigned int>(resolution.y)), "Snake", Style::Default);
     window.setFramerateLimit(FPS);

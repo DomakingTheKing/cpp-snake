@@ -118,7 +118,9 @@ void Engine::update() {
         // Collision detection - Snake Body
         for (int s = 1; s < snake.size(); s++) {
             if (snake[0].getShape().getGlobalBounds().intersects(snake[s].getShape().getGlobalBounds())) {
+                soundEngine.playSound(soundEngine.getBonkSfx());
                 // Game Over
+                soundEngine.getCrowdBooLoseSfx()->setVolume(100);
                 soundEngine.playSound(soundEngine.getCrowdBooLoseSfx());
                 currentGameState = GameState::GAMEOVER;
             }
@@ -127,7 +129,9 @@ void Engine::update() {
         // Collision detection - Walls
         for (auto & wall : wallSections) {
             if (snake[0].getShape().getGlobalBounds().intersects(wall.getShape().getGlobalBounds())) {
+                soundEngine.playSound(soundEngine.getBonkSfx());
                 // Game Over
+                soundEngine.getCrowdBooLoseSfx()->setVolume(100);
                 soundEngine.playSound(soundEngine.getCrowdBooLoseSfx());
                 currentGameState = GameState::GAMEOVER;
             }
